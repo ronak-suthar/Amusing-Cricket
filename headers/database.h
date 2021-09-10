@@ -4,15 +4,25 @@
 #include<string>
 
 class database{
+    public:
+    
     const char *server,*user,*password,*databaseName;
     MYSQL* conn;
     MYSQL_RES* res;
     MYSQL_ROW row;
 
-    public:
+    
     database(void);
+
     MYSQL* establish_connection(void);
-    void execute_query(const std::string&);
-    ~database(void);
+    bool execute_query(const std::string&);
+
+    virtual void insertData(void);
+    virtual void updateData(void);
+    virtual void removeData(void);
+    virtual void viewData(void);
+
+    virtual ~database(void);
 };
+
 #endif

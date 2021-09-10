@@ -1,7 +1,9 @@
 #include <iostream>
 #include "../headers/menu.h"
-#include "../headers/player.h"
 #include "../headers/database.h"
+#include "../headers/player.h"
+#include "../headers/Team.h"
+
 void print(std::string s,int newline,Position pos,int linelength)
 {
     int spaces = 0;
@@ -22,7 +24,7 @@ void print(std::string s,int newline,Position pos,int linelength)
     std::cout << std::string(newline,'\n');
 }
 
-void ManagePlayers(database& db){
+void ManagePlayers(){
     const int LINELENGTH = 100;
     std::string header(LINELENGTH, '=');
     system("clear");
@@ -43,33 +45,32 @@ void ManagePlayers(database& db){
     std::cin>>choice;
     getchar();
 
-    Player Data;
+    Player* playerPtr = new Player();
+    database* databasePtr = playerPtr;
 
     switch (choice)
     {
     case 1:
-        Data.getData();
-        db.execute_query(Data.insertData());
+        playerPtr->getData();
+        databasePtr->insertData();
         break;
-        int id;
-        print("Kindly Enter ID of Player : ",0);
-        std::cin>>id;
     case 2:
-        Data.viewData(id);
+        databasePtr->viewData();
         break;
     case 3:
-        Data.removeData(id);
+        databasePtr->removeData();
         break;
     case 4:
-        Data.updateData(id);
+        databasePtr->updateData();
         break;
     default:
         print("You have Entered InValid Choice! ");
-        return;
+        menu();
     }
     getchar();
+    menu();
 }
-void ManageTeams(database& db){
+void ManageTeams(){
     const int LINELENGTH = 100;
     std::string header(LINELENGTH, '=');
     system("clear");
@@ -89,8 +90,31 @@ void ManageTeams(database& db){
     print("Enter Your Choice : ",0);
     std::cin>>choice;
     getchar();
+
+    Team* teamPtr = new Team;
+    database* databasePtr = teamPtr;
+    switch (choice)
+    {
+    case 1:
+        teamPtr->getData();
+        databasePtr->insertData();
+        break;
+    case 2:
+        databasePtr->viewData();
+        break;
+    case 3:
+        databasePtr->removeData();
+        break;
+    case 4:
+        databasePtr->updateData();
+        break;
+    default:
+        print("You have Entered InValid Choice! ");
+        menu();
+    }
+    menu();
 }
-void ManageMatches(database& db){
+void ManageMatches(){
 
 }
 void menu(void)
@@ -100,7 +124,6 @@ void menu(void)
     std::string header(LINELENGTH, '=');
     system("clear");
 
-    database db;
     std::cout << header << '\n';
     print("Welcome to Cricket Match Managment System",2);
 
@@ -119,13 +142,13 @@ void menu(void)
     switch (choice)
     {
     case 1:
-        ManagePlayers(db);
+        ManagePlayers();
         break;
     case 2:
-        ManageTeams(db);
+        ManageTeams();
         break;
     case 3:
-        ManageMatches(db);
+        ManageMatches();
         break;
     default:
         break;

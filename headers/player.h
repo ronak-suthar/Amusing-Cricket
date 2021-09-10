@@ -1,8 +1,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include<string>
 
-class Player{
+#include "database.h"
+
+class Player:public database{
     std::string Name;
     std::string Role;
     std::string TeamName;
@@ -11,10 +12,9 @@ class Player{
     public:
     Player(std::string="Dummy",std::string="Dummy",std::string="Dummy",int=0);
     void getData(void);
-    const std::string insertData(void);
-    void updateData(int);
-    void removeData(int);
-    void viewData(int);
-
+    void insertData(void);
+    void updateData(void);
+    void removeData(void);
+    void viewData(void);
 };
 #endif

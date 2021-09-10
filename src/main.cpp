@@ -5,6 +5,6 @@
 int main()
 {
     menu();
-    std::cout<<"program has ended\n";
+    print("Thank You For Using Cricket Managment System Do Visit Again");
     return 0;
 }

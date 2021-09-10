@@ -1,4 +1,5 @@
 #include"../headers/database.h"
+#include"../headers/menu.h"
 #include<iostream>
 
 database::database(void)
@@ -9,7 +10,6 @@ database::database(void)
     database::password = "ronak@db";
     database::conn = database::establish_connection();
 }
-
 MYSQL *database::establish_connection(void)
 {
     MYSQL *connection = mysql_init(NULL); // mysql instance
@@ -22,19 +22,29 @@ MYSQL *database::establish_connection(void)
     }
     return connection;
 }
-
-void database::execute_query(const std::string &query)
+bool database::execute_query(const std::string &query)
 {
     if (mysql_query(this->conn, query.c_str()))
     {
         std::cout << "ERROR : " << mysql_error(this->conn) << "\n";
+        return false;
     }
     else
     {
-        std::cout << "Transaction Successfull\n";
-        std::cout << "Press Any key to go back to menu\n";
-        getchar();
+        return true;
     }
+}
+void database::insertData(void){
+    print("Empty base class Virtual Method");
+}
+void database::updateData(void){
+    print("Empty base class Virtual Method");
+}
+void database::removeData(void){
+    print("Empty base class Virtual Method");
+}
+void database::viewData(void){
+    print("Empty base class Virtual Method");
 }
 database::~database(void)
 {

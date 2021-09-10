@@ -67,17 +67,71 @@ void Player::getData(void){
     // print("Player ID : "+std::to_string(this->ID));
 }
 
-void Player::viewData(int id){
-    
+void Player::viewData(void){
+    int playerID;
+    print("Enter Unique id of Player : ",0);
+    std::cin>>playerID;
+    getchar();
+
+    std::string query = "SELECT * FROM Player WHERE ID="+std::to_string(playerID);
+
+    if(execute_query(query)){
+        res = mysql_use_result(conn);
+        row = mysql_fetch_row(res);
+
+        if(row!=NULL){
+            print("-----------------------------------");
+            print("Player Details are as follows : ",2);
+            print("Name : "+std::string(row[0]),1);
+            print("Role : "+std::string(row[1]),1);
+            print("TeamName : "+std::string(row[2]),1);
+            print("ID : "+std::string(row[3]),1);
+            print("-----------------------------------");
+        }
+        else{
+            print("Player Not Found in Records");
+        }
+
+        mysql_free_result(res);
+    }
+    else{
+        print("There is Some Issue with your transactions");
+    }
 }
-void Player::removeData(int id){
+void Player::removeData(void){
+    int playerID;
+    print("Enter Unique id of Player : ",0);
+    std::cin>>playerID;
+    getchar();
+
+    std::string query = "DELETE FROM Player WHERE ID="+std::to_string(playerID);
+
+    if(execute_query(query) && mysql_affected_rows(conn)!=0){
+        print("Transaction Successfull");
+        print("Press Any key to go back to menu");
+        getchar();
+    }
+    else if(mysql_affected_rows(conn)==0){
+        print("Records Already doesn't Exists for given ID");
+    }
+    else{
+        print("There is Some Issue with your transactions");
+    }    
 
 }
-void Player::updateData(int id){
+void Player::updateData(void){
+    print("Which Feild You Would Like to Update ? ");
     
 }
 
-const std::string Player::insertData(void){
+void Player::insertData(){
     std::string query = "INSERT INTO Player VALUES (\""+this->Name+"\",\""+this->Role+"\",\""+this->TeamName+"\",\""+std::to_string(this->ID)+"\")";
-    return query;
+    if(execute_query(query)){
+        print("Transaction Successfull");
+        print("Press Any key to go back to menu");
+        getchar();
+    }
+    else{
+        print("There is Some Issue with your transactions");
+    }
 }
