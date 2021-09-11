@@ -24,7 +24,7 @@ void print(std::string s,int newline,Position pos,int linelength)
     std::cout << std::string(newline,'\n');
 }
 
-void ManagePlayers(){
+void ManagePlayers(database* basePtr){
     const int LINELENGTH = 100;
     std::string header(LINELENGTH, '=');
     system("clear");
@@ -45,23 +45,20 @@ void ManagePlayers(){
     std::cin>>choice;
     getchar();
 
-    Player* playerPtr = new Player();
-    database* databasePtr = playerPtr;
-
     switch (choice)
     {
     case 1:
-        playerPtr->getData();
-        databasePtr->insertData();
+        basePtr->getData();
+        basePtr->insertData();
         break;
     case 2:
-        databasePtr->viewData();
+        basePtr->viewData();
         break;
     case 3:
-        databasePtr->removeData();
+        basePtr->removeData();
         break;
     case 4:
-        databasePtr->updateData();
+        basePtr->updateData();
         break;
     default:
         print("You have Entered InValid Choice! ");
@@ -70,7 +67,7 @@ void ManagePlayers(){
     getchar();
     menu();
 }
-void ManageTeams(){
+void ManageTeams(database* basePtr){
     const int LINELENGTH = 100;
     std::string header(LINELENGTH, '=');
     system("clear");
@@ -91,30 +88,29 @@ void ManageTeams(){
     std::cin>>choice;
     getchar();
 
-    Team* teamPtr = new Team;
-    database* databasePtr = teamPtr;
     switch (choice)
     {
     case 1:
-        teamPtr->getData();
-        databasePtr->insertData();
+        basePtr->getData();
+        basePtr->insertData();
         break;
     case 2:
-        databasePtr->viewData();
+        basePtr->viewData();
         break;
     case 3:
-        databasePtr->removeData();
+        basePtr->removeData();
         break;
     case 4:
-        databasePtr->updateData();
+        basePtr->updateData();
         break;
     default:
         print("You have Entered InValid Choice! ");
         menu();
     }
+    getchar();
     menu();
 }
-void ManageMatches(){
+void ManageMatches(database* basePtr){
 
 }
 void menu(void)
@@ -134,25 +130,32 @@ void menu(void)
     print("1. Manage Players",2);
     print("2. Manage Teams  ",2);
     print("3. Manage Matches",2);
-
+    print("Press Any Other Value To Exit",2);
     print("Enter your choice : ",0,CENTRE,80);
     std::cin>>choice;
     getchar();
 
+    database* basePtr;
+
     switch (choice)
     {
     case 1:
-        ManagePlayers();
+        basePtr = new Player();
+        ManagePlayers(basePtr);
+        delete basePtr;
         break;
     case 2:
-        ManageTeams();
+        basePtr = new Team();
+        ManageTeams(basePtr);
+        delete basePtr;
         break;
     case 3:
-        ManageMatches();
+        basePtr = new Player();//Change
+        ManageMatches(basePtr);
+        delete basePtr;
         break;
     default:
         break;
     }
 
-    std::cout << header << '\n';
 }

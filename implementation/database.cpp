@@ -34,6 +34,9 @@ bool database::execute_query(const std::string &query)
         return true;
     }
 }
+void database::getData(void){
+    print("Empty base class Virtual Method");
+}
 void database::insertData(void){
     print("Empty base class Virtual Method");
 }

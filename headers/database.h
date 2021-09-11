@@ -10,13 +10,13 @@ class database{
     MYSQL* conn;
     MYSQL_RES* res;
     MYSQL_ROW row;
-
     
     database(void);
 
     MYSQL* establish_connection(void);
     bool execute_query(const std::string&);
 
+    virtual void getData(void);
     virtual void insertData(void);
     virtual void updateData(void);
     virtual void removeData(void);
