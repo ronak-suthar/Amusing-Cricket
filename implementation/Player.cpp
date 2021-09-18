@@ -1,12 +1,13 @@
-#include <iostream>
 #include "../headers/player.h"
 #include "../headers/menu.h"
+#include <iomanip>
+#include <iostream>
 
 Player::Player(std::string name, std::string role, std::string teamname, int id)
 {
-    Name = name;
-    Role = role;
-    TeamName = teamname;
+    playerName = name;
+    playerRole = role;
+    playerTeamName = teamname;
     ID = id;
 }
 
@@ -19,7 +20,7 @@ void Player::getData(void)
 
     print("Enter Player Name : ", 0, CENTRE, 80);
     std::getline(std::cin, temp);
-    this->Name = temp;
+    this->playerName = temp;
 
     print("", 2);
 
@@ -38,16 +39,16 @@ void Player::getData(void)
     switch (choice)
     {
     case 1:
-        this->Role = "Batsmen";
+        this->playerRole = "Batsmen";
         break;
     case 2:
-        this->Role = "Bowler";
+        this->playerRole = "Bowler";
         break;
     case 3:
-        this->Role = "Wicket Keeper";
+        this->playerRole = "Wicket Keeper";
         break;
     case 4:
-        this->Role = "All Rounder";
+        this->playerRole = "All Rounder";
         break;
 
     default:
@@ -58,7 +59,7 @@ void Player::getData(void)
 
     print("Enter Player Team Name : ", 0);
     std::getline(std::cin, temp);
-    this->TeamName = temp;
+    this->playerTeamName = temp;
     print("", 1);
 
     print("Enter Player Unique ID : ", 0);
@@ -232,7 +233,7 @@ void Player::updateData(void)
 
 void Player::insertData()
 {
-    std::string query = "INSERT INTO Player VALUES (\"" + this->Name + "\",\"" + this->Role + "\",\"" + this->TeamName + "\",\"" + std::to_string(this->ID) + "\")";
+    std::string query = "INSERT INTO Player VALUES (\"" + this->playerName + "\",\"" + this->playerRole + "\",\"" + this->playerTeamName + "\",\"" + std::to_string(this->ID) + "\")";
     if (execute_query(query))
     {
         print("Transaction Successfull");
@@ -243,4 +244,89 @@ void Player::insertData()
     {
         print("There is Some Issue with your transactions");
     }
+}
+
+void Player::displayAllPlayers(std::string &name)
+{
+    std::string query = "SELECT ID,Name,Role FROM Player WHERE TeamName=\"" + name + "\"";
+
+    try
+    {
+        if (!execute_query(query))
+        {
+            throw 0;
+        }
+
+        res = mysql_use_result(conn);
+
+        std::cout << std::string(55, '-');
+        std::cout <<"\n";
+        std::cout << std::setw(5) << std::left << "| ID ";
+        std::cout << std::setw(30) << std::left << "| Name ";
+        std::cout << std::setw(15) << std::left << "| Role ";
+        std::cout << "\n";
+        std::cout << std::string(55, '-');
+        std::cout <<"\n";
+
+        while ((this->row = mysql_fetch_row(this->res)) != NULL)
+        {   
+            std::cout <<"| "<< std::setw(5) << std::left << row[0];
+            std::cout <<"| "<< std::setw(30) << std::left << row[1];
+            std::cout <<"| "<< std::setw(15) << std::left << row[2];
+
+            std::cout << "\n";
+            std::cout << std::string(55, '-');
+            std::cout << "\n";
+        }
+
+    }
+    catch (int e)
+    {
+        print("This Operation has issues", 1);
+    }
+}
+
+std::string Player::getPlayerName(int id){
+    std::string query = "SELECT Name FROM Player WHERE ID="+std::to_string(id);
+
+    try
+    {
+        if(!execute_query(query)){
+            throw 0;
+        }
+
+        res = mysql_use_result(conn);
+
+        row = mysql_fetch_row(res);
+
+        if(row!=NULL){
+            std::string result=row[0];
+            mysql_free_result(res);
+            return std::string(result);
+        }
+        mysql_free_result(res);
+    }
+    catch(int e)
+    {   
+        print("This Operation has issues", 1);
+        return "Dummy";
+    }
+
+    return "Dummy";
+    
+}
+void Player::setupBattingOrder(std::queue<std::pair<std::string,int>>& team){
+    print("Enter Player IDs to Add them to Batting Order : ");
+
+    for(int i=0,id=0;i<11;i++){
+        print("Enter "+std::to_string(i+1)+" Player ID : ",0);
+        std::cin>>id;
+        if(id==-1){
+            return;
+        }
+        getchar();
+        team.push({getPlayerName(id),id});
+    }
+
+    return;
 }

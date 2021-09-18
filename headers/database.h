@@ -10,8 +10,8 @@ class database{
     MYSQL* conn;
     MYSQL_RES* res;
     MYSQL_ROW row;
-    
-    database(void);
+
+    database();
 
     MYSQL* establish_connection(void);
     bool execute_query(const std::string&);
